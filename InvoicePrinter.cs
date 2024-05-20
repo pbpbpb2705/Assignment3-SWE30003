@@ -1,4 +1,3 @@
-﻿//Import needed library
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    class Program
+    public abstract class InvoicePrinter
     {
-        static void Main(string[] args)
+        public InvoicePrinter()
         {
-            Console.WriteLine("Hello");
+        }
+        public abstract string PrintInvoice()
+        {
         }
     }
 }
