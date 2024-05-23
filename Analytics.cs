@@ -18,6 +18,11 @@ namespace Assignment3
             //print analytics from database
             
         }
+
+        public void HandleAnalytics()
+        {
+
+        }
     }
 }
 

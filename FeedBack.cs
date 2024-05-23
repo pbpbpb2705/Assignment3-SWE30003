@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    public class Dish : PayableComponent
+    public class FeedBack
     {
-        public Dish(string name, decimal price) : base(name, price)
+        public FeedBack() 
+        { 
+        }
+        public void Collect()
         {
+
         }
     }
 }

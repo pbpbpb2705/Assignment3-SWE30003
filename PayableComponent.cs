@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    internal abstract class PayableComponent
+    public abstract class PayableComponent
     {
         public string Name { get; set; }
         public decimal Price { get; set; }

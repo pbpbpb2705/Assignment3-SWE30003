@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    public class Dish : PayableComponent
+    public class Set: PayableComponent
     {
-        public Dish(string name, decimal price) : base(name, price)
-        {
+        List<Dish> set;
+        public Set(string name, decimal price) : base(name, price)
+        { 
         }
     }
 }

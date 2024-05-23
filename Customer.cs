@@ -14,7 +14,7 @@ namespace Assignment3
         public string Email { get; set; }
         public bool Payed { get; set; }
         public List<Order> Orders { get; set; }
-        public Feedback Feedback { get; set; }
+        public FeedBack Feedback { get; set; }
         public Customer(string name, string phone, string email, List<Order> orders)
         {
             Name = name;

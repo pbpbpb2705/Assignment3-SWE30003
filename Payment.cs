@@ -11,7 +11,7 @@ namespace Assignment3
         private Order _order;
         public Payment(Order order) : base()
         {
-            _order = order
+            _order = order;
         }
         public override string PrintInvoice()
         {
