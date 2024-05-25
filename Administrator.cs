@@ -144,8 +144,22 @@ namespace Assignment3
 
         private void Stocktake()
         {
-            // Implement stocktake logic (e.g., display current stock of ingredients)
-            // ...
+            Console.WriteLine("\nStocktake:");
+            Console.WriteLine("----------");
+
+            // Get all unique ingredients used in dishes (adjust if needed)
+            List<Ingredient> allIngredients = _db.Dishes.FindAll()
+                .SelectMany(dish => dish.Ingredients) // Flatten the ingredient lists
+                .DistinctBy(i => i.Name) // Use DistinctBy to avoid duplicates (if needed)
+                .ToList();
+
+            // Display stock information for each ingredient
+            foreach (var ingredient in allIngredients)
+            {
+                Console.WriteLine($"{ingredient.Name}: {ingredient.Stock} in stock");
+            }
+
+            Console.WriteLine(); // Add an extra line for readability
         }
 
         // Methods to add, delete, and update data in database

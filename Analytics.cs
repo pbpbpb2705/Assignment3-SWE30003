@@ -24,7 +24,25 @@ namespace Assignment3
 
         public void HandleAnalytics()
         {
-            // ... (Implementation for handling analytics not provided in the original code)
+            Console.WriteLine("\nOrder Analytics:");
+            Console.WriteLine("----------------");
+
+            // 1. Fetch all orders from the database
+            var allOrders = _db.Orders.FindAll();
+
+            decimal total = 0;
+
+            // 2. Loop through each order and calculate the total
+            foreach (var order in allOrders)
+            {
+                decimal orderTotal = order.CalculateTotal(); // Assuming CalculateTotal exists in Order
+
+                total += orderTotal;
+                // 3. Display the order ID and its total price
+                Console.WriteLine($"Gross Income ${total}");
+            }
+
+            Console.WriteLine(); // Add an extra line for readability
         }
     }
 }
