@@ -20,7 +20,6 @@ namespace Assignment3
         public bool Payed { get; set; }
         public List<Order> Orders { get; set; }
         public Feedback Feedback { get; set; }
-        private Database _db;
 
         // Add an ID property to the Customer class
         public ObjectId Id { get; set; }
@@ -31,12 +30,11 @@ namespace Assignment3
             Orders = new List<Order>(); // Initialize the list here
         }
 
-        public Customer(string name, string phone, string email, Database db)
+        public Customer(string name, string phone, string email)
         {
             Name = name;
             Phone = phone;
             Email = email;
-            _db = db;
             Id = ObjectId.NewObjectId(); // Set a new ObjectId here!
             Orders = new List<Order>(); // Initialize the list here as well
         }
@@ -54,30 +52,39 @@ namespace Assignment3
                 Console.WriteLine("------------------");
 
                 Console.Write("Choose an option: ");
-                int choice = int.Parse(Console.ReadLine());
-
-                switch (choice)
+                try
                 {
-                    case 1:
-                        // Order Food
-                        Menu menu = new Menu(_db); // Create menu instance
-                        PlaceOrder(menu);
-                        break;
-                    case 2:
-                        // Make Reservation
-                        MakeReservation();
-                        break;
-                    case 3:
-                        // Give Feedback
-                        GiveFeedback();
-                        break;
-                    case 4:
-                        // Back to Main Menu
-                        return; // Exit Customer Mode
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            // Order Food
+                            Menu menu = new Menu(); // Create menu instance
+                            PlaceOrder(menu);
+                            break;
+                        case 2:
+                            // Make Reservation
+                            MakeReservation();
+                            break;
+                        case 3:
+                            // Give Feedback
+                            GiveFeedback();
+                            break;
+                        case 4:
+                            // Back to Main Menu
+                            return; // Exit Customer Mode
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
                 }
+                catch (Exception _)
+                {
+                    Console.WriteLine("Invalid input. Please try again");
+                    return;
+                }
+
             }
         }
 
@@ -128,13 +135,13 @@ namespace Assignment3
 
             // Add order to customer's list
             Orders.Add(order);
-            _db.Orders.Insert(order);
+            Database.getDatabase().Orders.Insert(order);
         }
 
         // Get latest order
         public Order GetLatestOrder()
         {
-            return _db.Orders.FindOne(x => x.CustomerId == Id); // Use CustomerId to find the order
+            return Database.getDatabase().Orders.FindOne(x => x.CustomerId == Id); // Use CustomerId to find the order
         }
 
         private void MakeReservation()
@@ -159,7 +166,7 @@ namespace Assignment3
                     Reservation reservation = new Reservation(reservationId, this, numPeople, reservationDate);
 
                     // Insert the reservation into the database
-                    _db.Reservations.Insert(reservation);
+                    Database.getDatabase().Reservations.Insert(reservation);
 
                     Console.WriteLine($"Reservation successfully made. Your reservation ID is: {reservationId}");
                 }
@@ -180,13 +187,16 @@ namespace Assignment3
             Console.WriteLine("------------------");
 
             Console.Write("Enter your feedback: ");
-            string feedbackText = Console.ReadLine();
-
+            string? feedbackText = Console.ReadLine();
+            if (string.IsNullOrEmpty(feedbackText))
+            {
+                feedbackText = "No feedback provided.";
+            }
             // Create a new Feedback object
             Feedback feedback = new Feedback(feedbackText);
 
             // 1. Find the customer document
-            var customer = _db.Customers.FindById(Id);
+            var customer = Database.getDatabase().Customers.FindById(Id);
 
             // 2. Update the feedback property
             if (customer != null)
@@ -194,7 +204,7 @@ namespace Assignment3
                 customer.Feedback = feedback;
 
                 // 3. Update the document in the database
-                _db.Customers.Update(customer);
+                Database.getDatabase().Customers.Update(customer);
 
                 Console.WriteLine("Thank you for your feedback!");
             }

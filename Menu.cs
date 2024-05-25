@@ -9,19 +9,18 @@ namespace Assignment3
     // Menu class to display and manage menu items
     public class Menu
     {
-        private Database _db;
         private int _nextID = 1; // Counter for IDs
 
-        public Menu(Database db)
+        public Menu()
         {
-            _db = db;
+           
         }
 
         public void DisplayMenu()
         {
             Console.WriteLine("----- Menu -----");
-            var dishes = _db.Dishes.FindAll();
-            var sets = _db.Sets.FindAll();
+            var dishes = Database.getDatabase().Dishes.FindAll();
+            var sets = Database.getDatabase().Sets.FindAll();
 
             // Display dishes
             Console.WriteLine("Dishes:");
@@ -44,7 +43,7 @@ namespace Assignment3
         public void AddDish(string name, decimal price)
         {
             var newDish = new Dish(name, price) { ID = _nextID };
-            _db.Dishes.Insert(newDish);
+            Database.getDatabase().Dishes.Insert(newDish);
             _nextID++; // Increment dish ID counter
             Console.WriteLine($"Dish '{name}' added to the menu.");
         }
@@ -53,25 +52,25 @@ namespace Assignment3
         public void AddSet(string name, decimal price, List<Dish> dishes)
         {
             var newSet = new Set(name, price) { ID = _nextID, Dishes = dishes };
-            _db.Sets.Insert(newSet);
+            Database.getDatabase().Sets.Insert(newSet);
             _nextID++; // Increment set ID counter
             Console.WriteLine($"Set '{name}' added to the menu.");
         }
 
-        public PayableComponent ChooseItem(int choice)
+        public PayableComponent? ChooseItem(int choice)
         {
             // Check if the choice is for a Dish or a Set
             if (choice > 0)
             {
                 // Find Dish by ID
-                var dish = _db.Dishes.FindOne(x => x.ID == choice);
+                var dish = Database.getDatabase().Dishes.FindOne(x => x.ID == choice);
                 if (dish != null)
                 {
                     return dish;
                 }
 
                 // Find Set by ID
-                var set = _db.Sets.FindOne(x => x.ID == choice);
+                var set = Database.getDatabase().Sets.FindOne(x => x.ID == choice);
                 if (set != null)
                 {
                     return set;

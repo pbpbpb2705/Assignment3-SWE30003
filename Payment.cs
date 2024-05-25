@@ -9,18 +9,16 @@ namespace Assignment3
     public class Payment : InvoicePrinter
     {
         private Order _order;
-        private Database _db; // You'll need to pass the Database instance to Payment
 
-        public Payment(Order order, Database db) : base() // Pass the database instance
+        public Payment(Order order) : base() // Pass the database instance
         {
             _order = order;
-            _db = db;
         }
 
         public override string PrintInvoice()
         {
             // Fetch the customer from the database using the CustomerId in the Order
-            var customer = _db.Customers.FindById(_order.CustomerId);
+            var customer = Database.getDatabase().Customers.FindById(_order.CustomerId);
 
             string invoice = "";
             invoice += "Invoice\n";

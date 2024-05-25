@@ -17,11 +17,11 @@ namespace Assignment3
             _litedb = db;
         }
 
-        public static Database getDatabase(LiteDatabase db)
+        public static Database getDatabase()
         {
             if (_db == null)
             {
-                _db = new Database(db);
+                _db = new Database(new LiteDatabase("restaurant.db"));
             }
             return _db;
         }
@@ -34,26 +34,28 @@ namespace Assignment3
         public ILiteCollection<Set> Sets => _litedb.GetCollection<Set>("Sets");
         public ILiteCollection<Reservation> Reservations => _litedb.GetCollection<Reservation>("Reservations");
 
-        // Check if an ingredient is available
-        public bool CheckAvail(Ingredient ingredient)
-        {
-            return Ingredients.FindOne(x => x.Name == ingredient.Name).Stock > 0;
-        }
-
         // Check the stock of an ingredient
         public decimal CheckStock(Ingredient ingredient)
         {
-            return Ingredients.FindOne(x => x.Name == ingredient.Name).Stock;
+            foreach (Ingredient ing in Ingredients.FindAll())
+            {
+                if (ing.Name == ingredient.Name)
+                {
+                    return ing.Stock;
+                }
+            }
+            return -1;
         }
 
         // Update the price of an ingredient
-        public void UpdatePrice(Ingredient ingredient)
+        public void Update(Ingredient ingredient)
         {
-            var existingIngredient = Ingredients.FindOne(x => x.Name == ingredient.Name);
-            if (existingIngredient != null)
+            foreach (Ingredient ing in Ingredients.FindAll())
             {
-                existingIngredient.Price = ingredient.Price;
-                Ingredients.Update(existingIngredient);
+                if (ing.Name == ingredient.Name)
+                {
+                    Ingredients.Update(ingredient);
+                }
             }
         }
     }
