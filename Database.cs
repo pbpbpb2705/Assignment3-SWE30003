@@ -9,20 +9,30 @@ namespace Assignment3
 {
     public class Database
     {
-        private LiteDatabase _db;
+        private static Database? _db;
+        private LiteDatabase _litedb;
 
-        public Database(LiteDatabase db)
+        private Database(LiteDatabase db)
         {
-            _db = db;
+            _litedb = db;
+        }
+
+        public static Database getDatabase(LiteDatabase db)
+        {
+            if (_db == null)
+            {
+                _db = new Database(db);
+            }
+            return _db;
         }
 
         // Methods to interact with database collections
-        public ILiteCollection<Dish> Dishes => _db.GetCollection<Dish>("Dishes");
-        public ILiteCollection<Ingredient> Ingredients => _db.GetCollection<Ingredient>("Ingredients");
-        public ILiteCollection<Customer> Customers => _db.GetCollection<Customer>("Customers");
-        public ILiteCollection<Order> Orders => _db.GetCollection<Order>("Orders");
-        public ILiteCollection<Set> Sets => _db.GetCollection<Set>("Sets");
-        public ILiteCollection<Reservation> Reservations => _db.GetCollection<Reservation>("Reservations");
+        public ILiteCollection<Dish> Dishes => _litedb.GetCollection<Dish>("Dishes");
+        public ILiteCollection<Ingredient> Ingredients => _litedb.GetCollection<Ingredient>("Ingredients");
+        public ILiteCollection<Customer> Customers => _litedb.GetCollection<Customer>("Customers");
+        public ILiteCollection<Order> Orders => _litedb.GetCollection<Order>("Orders");
+        public ILiteCollection<Set> Sets => _litedb.GetCollection<Set>("Sets");
+        public ILiteCollection<Reservation> Reservations => _litedb.GetCollection<Reservation>("Reservations");
 
         // Check if an ingredient is available
         public bool CheckAvail(Ingredient ingredient)
