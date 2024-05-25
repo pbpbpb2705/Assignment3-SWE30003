@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    public class FeedBack
+    // Feedback class (you need to create this)
+    public class Feedback
     {
-        public FeedBack() 
-        { 
-        }
-        public void Collect()
-        {
+        public string Text { get; set; }
 
+        public Feedback(string text)
+        {
+            Text = text;
         }
     }
 }

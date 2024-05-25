@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
+    // InvoicePrinter abstract class
     public abstract class InvoicePrinter
     {
         public InvoicePrinter()
         {
         }
-        public abstract string PrintInvoice()
-        {
-        }
+
+        public abstract string PrintInvoice();
     }
 }

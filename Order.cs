@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
+    // Order class to represent an order
     public class Order
     {
         public decimal ID { get; set; }

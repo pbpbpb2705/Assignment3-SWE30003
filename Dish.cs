@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
+    // Dish class representing a dish
     public class Dish : PayableComponent
     {
         public Dish(string name, decimal price) : base(name, price)

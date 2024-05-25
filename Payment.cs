@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
+    // Payment class for processing payments
     public class Payment : InvoicePrinter
     {
         private Order _order;
+
         public Payment(Order order) : base()
         {
             _order = order;
         }
+
         public override string PrintInvoice()
         {
             string invoice = "";
