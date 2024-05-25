@@ -3,24 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Assignment3
 {
     // Analytics class for generating reports
     public class Analytics : InvoicePrinter
     {
-        private Database _db;
 
-        public Analytics(Database db) : base()
+        public Analytics() : base()
         {
-            _db = db;
+
         }
 
         public override string PrintInvoice()
         {
-            // Implementation for printing analytics from database
-            return "";
-        }
+            string invoice = "Analytics Report\n";
+            invoice += "----------\n";
+            //Get all orders from the database
+            IEnumerable<Order> orders = Database.getDatabase().Orders.FindAll();
+            int totalOrders = 0;
+            decimal totalRevenue = 0;
+
+            foreach (Order order in orders)
+            {
+                order.Items.ForEach(item => totalRevenue += item.Price);
+                totalOrders++;
+            }
 
         public void HandleAnalytics()
         {

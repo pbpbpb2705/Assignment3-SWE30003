@@ -10,9 +10,8 @@ namespace Assignment3
         static void Main(string[] args)
         {
             // Initialize Database class with LiteDB instance
-            var database = Database.getDatabase(new LiteDatabase("restaurant.db"));
-            var menu = new Menu(database); // Create menu instance
-            var administrator = new Administrator(database, menu); // Create admin instance with menu reference
+            var menu = new Menu(); // Create menu instance
+            var administrator = new Administrator(menu); // Create admin instance with menu reference
 
             while (true)
             {

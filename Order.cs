@@ -13,7 +13,7 @@ namespace Assignment3
         public decimal ID { get; set; }
 
         // Store the Customer's ObjectId directly
-        public ObjectId CustomerId { get; set; }
+        public ObjectId? CustomerId { get; set; }
 
         public List<PayableComponent> Items { get; set; }
 

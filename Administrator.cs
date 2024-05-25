@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,12 +10,10 @@ namespace Assignment3
     // Administrator class to manage database and menu
     public class Administrator
     {
-        private Database _db;
         private Menu _menu;
 
-        public Administrator(Database db, Menu menu) // Pass menu as parameter
+        public Administrator(Menu menu) // Pass menu as parameter
         {
-            _db = db;
             _menu = menu;
         }
 
@@ -33,38 +32,46 @@ namespace Assignment3
                 Console.WriteLine("------------------");
 
                 Console.Write("Choose an option: ");
-                int choice = int.Parse(Console.ReadLine());
-
-                switch (choice)
+                try
                 {
-                    case 1:
-                        // Manage Menu
-                        ManageMenu();
-                        break;
-                    case 2:
-                        // Stocktake
-                        Stocktake();
-                        break;
-                    case 3:
-                        // Analytics
-                        Analytics analytics = new Analytics(_db);
-                        analytics.HandleAnalytics();
-                        break;
-                    case 4:
-                        // View Orders
-                        ViewOrders();
-                        break;
-                    case 5:
-                        // View Customers
-                        ViewCustomers();
-                        break;
-                    case 6:
-                        // Back to Main Menu
-                        return; // Exit Admin Mode
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            // Manage Menu
+                            ManageMenu();
+                            break;
+                        case 2:
+                            // Stocktake
+                            Stocktake();
+                            break;
+                        case 3:
+                            // Analytics
+                            Analytics analytics = new Analytics();
+                            Console.WriteLine(analytics.PrintInvoice());
+                            break;
+                        case 4:
+                            // View Orders
+                            ViewOrders();
+                            break;
+                        case 5:
+                            // View Customers
+                            ViewCustomers();
+                            break;
+                        case 6:
+                            // Back to Main Menu
+                            return; // Exit Admin Mode
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
                 }
+                catch (Exception _)
+                {
+                    Console.WriteLine("Please enter a number");
+                }   
+
             }
         }
 
@@ -81,63 +88,71 @@ namespace Assignment3
                 Console.WriteLine("------------------");
 
                 Console.Write("Choose an option: ");
-                int choice = int.Parse(Console.ReadLine());
-
-                switch (choice)
+                try
                 {
-                    case 1:
-                        Console.Write("Enter dish name: ");
-                        string dishName = Console.ReadLine();
-                        Console.Write("Enter dish price: ");
-                        decimal dishPrice = decimal.Parse(Console.ReadLine());
-                        _menu.AddDish(dishName, dishPrice); // Use _menu to add dish
-                        break;
+                    int choice = int.Parse(Console.ReadLine());
 
-                    case 2:
-                        Console.Write("Enter set name: ");
-                        string setName = Console.ReadLine();
-                        Console.Write("Enter set price: ");
-                        decimal setPrice = decimal.Parse(Console.ReadLine());
+                    switch (choice)
+                    {
+                        case 1:
+                            Console.Write("Enter dish name: ");
+                            string dishName = Console.ReadLine();
+                            Console.Write("Enter dish price: ");
+                            decimal dishPrice = decimal.Parse(Console.ReadLine());
+                            _menu.AddDish(dishName, dishPrice); // Use _menu to add dish
+                            break;
 
-                        // Loop to choose dishes for the set
-                        List<Dish> setDishes = new List<Dish>();
-                        bool doneAddingDishes = false;
-                        while (!doneAddingDishes)
-                        {
-                            _menu.DisplayMenu(); // Display the menu to show dishes
-                            Console.WriteLine("Enter the ID of the dish to add to the set (or 0 to finish):");
-                            int dishId = int.Parse(Console.ReadLine());
+                        case 2:
+                            Console.Write("Enter set name: ");
+                            string setName = Console.ReadLine();
+                            Console.Write("Enter set price: ");
+                            decimal setPrice = decimal.Parse(Console.ReadLine());
 
-                            if (dishId == 0)
+                            // Loop to choose dishes for the set
+                            List<Dish> setDishes = new List<Dish>();
+                            bool doneAddingDishes = false;
+                            while (!doneAddingDishes)
                             {
-                                doneAddingDishes = true;
-                            }
-                            else
-                            {
-                                var chosenDish = _db.Dishes.FindOne(x => x.ID == dishId);
-                                if (chosenDish != null)
+                                _menu.DisplayMenu(); // Display the menu to show dishes
+                                Console.WriteLine("Enter the ID of the dish to add to the set (or 0 to finish):");
+                                int dishId = int.Parse(Console.ReadLine());
+
+                                if (dishId == 0)
                                 {
-                                    setDishes.Add(chosenDish);
-                                    Console.WriteLine($"Dish '{chosenDish.Name}' added to the set.");
+                                    doneAddingDishes = true;
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Invalid dish ID. Please try again.");
+                                    var chosenDish = Database.getDatabase().Dishes.FindOne(x => x.ID == dishId);
+                                    if (chosenDish != null)
+                                    {
+                                        setDishes.Add(chosenDish);
+                                        Console.WriteLine($"Dish '{chosenDish.Name}' added to the set.");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Invalid dish ID. Please try again.");
+                                    }
                                 }
                             }
-                        }
 
-                        _menu.AddSet(setName, setPrice, setDishes);
-                        break;
+                            _menu.AddSet(setName, setPrice, setDishes);
+                            break;
 
-                    case 3:
-                        _menu.DisplayMenu();
-                        break;
-                    case 4:
-                        return; // Back to Admin Menu
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
+                        case 3:
+                            _menu.DisplayMenu();
+                            break;
+                        case 4:
+                            return; // Back to Admin Menu
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
+                }
+                catch (Exception _)
+                {
+                    Console.WriteLine("Invalid input. Please try again");
+                    return;
                 }
             }
         }
@@ -162,26 +177,66 @@ namespace Assignment3
             Console.WriteLine(); // Add an extra line for readability
         }
 
-        // Methods to add, delete, and update data in database
-        public void AddDatabase(Database db)
-        {
-            // ... (Implementation not provided in the original code)
+                }
+                catch (Exception _)
+                {
+                    Console.WriteLine("Invalid input. Please try again");
+                    return;
+                }
+            }
         }
 
-        public void DeleteDatabase(Database db)
+        private void PrintStocks()
         {
-            // ... (Implementation not provided in the original code)
+            // Implement stocktake logic (e.g., display current stock of ingredients)
+            // Get all ingredients from the database
+            var ingredients = Database.getDatabase().Ingredients.FindAll();
+            Console.WriteLine("Stocktake:");
+            Console.WriteLine("----------");
+            foreach (Ingredient ingredient in ingredients)
+            {
+                Console.WriteLine($"Ingredient: {ingredient.Name}");
+                Console.WriteLine($"Stock: {ingredient.Stock}");
+                Console.WriteLine("-----");
+            }
         }
 
-        public void UpdateDatabase(Database db)
+        private void AddIngredient()
         {
-            // ... (Implementation not provided in the original code)
+            Console.Write("Enter ingredient name: ");
+            string ingredientName = Console.ReadLine();
+            Console.Write("Enter ingredient stock: ");
+            decimal ingredientStock = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Enter ingredient calories: ");
+            decimal ingredientCalories = decimal.Parse(Console.ReadLine());
+            Console.Write("Enter ingredient price: ");
+            decimal ingredientPrice = decimal.Parse(Console.ReadLine());
+
+            Ingredient newIngredient = new Ingredient(ingredientName, ingredientCalories, ingredientPrice, ingredientStock);
+            Console.WriteLine(Database.getDatabase().CheckStock(newIngredient));
+            if (Database.getDatabase().CheckStock(newIngredient) > -1)
+            {
+                Console.WriteLine($"Ingredient '{ingredientName}' already exists in stock.");
+                return;
+            }
+            Database.getDatabase().Ingredients.Insert(newIngredient);
+            Console.WriteLine($"Ingredient '{ingredientName}' added to stock.");
         }
 
-        // Method to handle analytics
-        public void HandleAnalyic(Analytics analytics)
+        private void UpdateIngredient()
         {
-            analytics.HandleAnalytics();
+            Console.Write("Enter ingredient name: ");
+            string updateIngredientName = Console.ReadLine();
+            Console.Write("Enter ingredient stock: ");
+            decimal newIngredientStock = decimal.Parse(Console.ReadLine());
+            Console.WriteLine("Enter ingredient calories: ");
+            decimal newIngredientCalories = decimal.Parse(Console.ReadLine());
+            Console.Write("Enter ingredient price: ");
+            decimal newIngredientPrice = decimal.Parse(Console.ReadLine());
+
+            Ingredient updateIngredient = new Ingredient(updateIngredientName, newIngredientCalories, newIngredientPrice, newIngredientStock);
+            Database.getDatabase().Update(updateIngredient);
+            Console.WriteLine($"Information of ingredient '{updateIngredientName}' updated.");
         }
 
         private void ViewOrders()
@@ -189,14 +244,14 @@ namespace Assignment3
             Console.WriteLine("\nOrders:");
             Console.WriteLine("-------");
 
-            var orders = _db.Orders.FindAll();
+            var orders = Database.getDatabase().Orders.FindAll();
             foreach (var order in orders)
             {
                 Console.WriteLine($"Order ID: {order.ID}");
                 Console.WriteLine($"Customer ID: {order.CustomerId}"); // Assuming you have CustomerId in Order
 
                 // Fetch customer details for display (if needed)
-                var customer = _db.Customers.FindById(order.CustomerId);
+                var customer = Database.getDatabase().Customers.FindById(order.CustomerId);
                 if (customer != null)
                 {
                     Console.WriteLine($"Customer Name: {customer.Name}");
@@ -217,7 +272,7 @@ namespace Assignment3
             Console.WriteLine("\nCustomers:");
             Console.WriteLine("----------");
 
-            var customers = _db.Customers.FindAll();
+            var customers = Database.getDatabase().Customers.FindAll();
             foreach (var customer in customers)
             {
                 Console.WriteLine($"ID: {customer.Id}");
