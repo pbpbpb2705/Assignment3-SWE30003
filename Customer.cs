@@ -28,7 +28,7 @@ namespace Assignment3
         // Parameterless constructor (required by LiteDB)
         public Customer()
         {
-            // You can initialize properties to default values if needed
+            Orders = new List<Order>(); // Initialize the list here
         }
 
         public Customer(string name, string phone, string email, Database db)
@@ -38,6 +38,7 @@ namespace Assignment3
             Email = email;
             _db = db;
             Id = ObjectId.NewObjectId(); // Set a new ObjectId here!
+            Orders = new List<Order>(); // Initialize the list here as well
         }
 
         public void CustomerMode()
@@ -86,8 +87,10 @@ namespace Assignment3
             // Display menu to terminal
             menu.DisplayMenu();
 
-            // Create a list of PayableComponent
-            var order = new Order(DateTime.Now.Ticks, this);
+            var order = new Order(DateTime.Now.Ticks)
+            {
+                CustomerId = Id // Set the CustomerId to the current customer's Id
+            };
 
             bool done = false;
 
@@ -131,7 +134,7 @@ namespace Assignment3
         // Get latest order
         public Order GetLatestOrder()
         {
-            return _db.Orders.FindOne(x => x.Customer.Name == Name);
+            return _db.Orders.FindOne(x => x.CustomerId == Id); // Use CustomerId to find the order
         }
 
         private void MakeReservation()

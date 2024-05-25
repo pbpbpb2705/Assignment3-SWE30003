@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Assignment3
 {
@@ -10,14 +11,16 @@ namespace Assignment3
     public class Order
     {
         public decimal ID { get; set; }
-        public Customer Customer { get; set; }
-        public List<PayableComponent> Items { get; set; } // List to hold items
 
-        public Order(decimal id, Customer customer)
+        // Store the Customer's ObjectId directly
+        public ObjectId CustomerId { get; set; }
+
+        public List<PayableComponent> Items { get; set; }
+
+        public Order(decimal id)
         {
             ID = id;
-            Customer = customer;
-            Items = new List<PayableComponent>(); // Initialize the list in the constructor
+            Items = new List<PayableComponent>();
         }
 
         // Method to add an item to the order

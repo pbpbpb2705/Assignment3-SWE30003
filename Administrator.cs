@@ -27,7 +27,9 @@ namespace Assignment3
                 Console.WriteLine("1. Manage Menu");
                 Console.WriteLine("2. Stocktake");
                 Console.WriteLine("3. Analytics");
-                Console.WriteLine("4. Back to Main Menu");
+                Console.WriteLine("4. View Orders"); // New option
+                Console.WriteLine("5. View Customers"); // New option
+                Console.WriteLine("6. Back to Main Menu"); // Shifted option number
                 Console.WriteLine("------------------");
 
                 Console.Write("Choose an option: ");
@@ -49,6 +51,14 @@ namespace Assignment3
                         analytics.HandleAnalytics();
                         break;
                     case 4:
+                        // View Orders
+                        ViewOrders();
+                        break;
+                    case 5:
+                        // View Customers
+                        ViewCustomers();
+                        break;
+                    case 6:
                         // Back to Main Menu
                         return; // Exit Admin Mode
                     default:
@@ -158,6 +168,50 @@ namespace Assignment3
         public void HandleAnalyic(Analytics analytics)
         {
             analytics.HandleAnalytics();
+        }
+
+        private void ViewOrders()
+        {
+            Console.WriteLine("\nOrders:");
+            Console.WriteLine("-------");
+
+            var orders = _db.Orders.FindAll();
+            foreach (var order in orders)
+            {
+                Console.WriteLine($"Order ID: {order.ID}");
+                Console.WriteLine($"Customer ID: {order.CustomerId}"); // Assuming you have CustomerId in Order
+
+                // Fetch customer details for display (if needed)
+                var customer = _db.Customers.FindById(order.CustomerId);
+                if (customer != null)
+                {
+                    Console.WriteLine($"Customer Name: {customer.Name}");
+                }
+                
+                Console.WriteLine("Items:");
+                foreach (var item in order.Items)
+                {
+                    Console.WriteLine($"- {item.Name} - ${item.Price}");
+                }
+                Console.WriteLine($"Total: ${order.CalculateTotal()}");
+                Console.WriteLine();
+            }
+        }
+
+        private void ViewCustomers()
+        {
+            Console.WriteLine("\nCustomers:");
+            Console.WriteLine("----------");
+
+            var customers = _db.Customers.FindAll();
+            foreach (var customer in customers)
+            {
+                Console.WriteLine($"ID: {customer.Id}");
+                Console.WriteLine($"Name: {customer.Name}");
+                Console.WriteLine($"Phone: {customer.Phone}");
+                Console.WriteLine($"Email: {customer.Email}");
+                Console.WriteLine();
+            }
         }
     }
 }
