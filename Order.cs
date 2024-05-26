@@ -12,6 +12,8 @@ namespace Assignment3
     {
         public decimal ID { get; set; }
 
+        public bool Completed { get; set; }
+
         // Store the Customer's ObjectId directly
         public ObjectId? CustomerId { get; set; }
 

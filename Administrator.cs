@@ -264,6 +264,7 @@ namespace Assignment3
             {
                 Console.WriteLine($"Order ID: {order.ID}");
                 Console.WriteLine($"Customer ID: {order.CustomerId}"); // Assuming you have CustomerId in Order
+                Console.WriteLine($"Order status: {order.Completed}");
 
                 // Fetch customer details for display (if needed)
                 var customer = Database.getDatabase().Customers.FindById(order.CustomerId);
@@ -279,6 +280,36 @@ namespace Assignment3
                 }
                 Console.WriteLine($"Total: ${order.CalculateTotal()}");
                 Console.WriteLine();
+            }
+
+            bool doneMarkingOrders = false;
+
+            while (!doneMarkingOrders)
+            {
+                Console.WriteLine("Enter the ID of the order to mark as completed (or 0 to finish):");
+                decimal orderId = decimal.Parse(Console.ReadLine());
+
+                if (orderId == 0)
+                {
+                    doneMarkingOrders = true;
+                }
+                else
+                {
+                    var chosenOrder = Database.getDatabase().Orders.FindOne(x => x.ID == orderId);
+                    if (chosenOrder != null)
+                    {
+                        chosenOrder.Completed = true; // Set Completed to true
+
+                        // Update the order in the database
+                        Database.getDatabase().Orders.Update(chosenOrder);
+
+                        Console.WriteLine($"Order '{chosenOrder.ID}' is completed.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid order ID. Please try again.");
+                    }
+                }
             }
         }
 
