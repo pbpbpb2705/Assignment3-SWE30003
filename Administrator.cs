@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -83,7 +84,7 @@ namespace Assignment3
                 Console.WriteLine("\nManage Menu");
                 Console.WriteLine("------------------");
                 Console.WriteLine("1. Add Dish");
-                Console.WriteLine("2. Add Set");
+                Console.WriteLine("2. Add Set"); 
                 Console.WriteLine("3. Display Menu");
                 Console.WriteLine("4. Back to Admin Menu");
                 Console.WriteLine("------------------");
@@ -325,7 +326,49 @@ namespace Assignment3
                 Console.WriteLine($"Name: {customer.Name}");
                 Console.WriteLine($"Phone: {customer.Phone}");
                 Console.WriteLine($"Email: {customer.Email}");
+            }
+
+            bool doneUpdating = false;
+
+            while (!doneUpdating)
+            {
                 Console.WriteLine();
+                Console.WriteLine("Enter the name of customer you want to update: (or 0 to finish):");
+                string chosenName = Console.ReadLine();
+
+                if (chosenName == "0")
+                {
+                    return;
+                }
+                var chosenCustomer = Database.getDatabase().Customers.FindOne(x => x.Name == chosenName);
+
+                if (chosenCustomer == null)
+                {
+                    Console.WriteLine("Invalid customer's Name. Please try again.");
+                }
+                else
+                {
+                    Console.WriteLine($"1: Phone");
+                    Console.WriteLine($"2: Email");
+                    Console.WriteLine("Enter (or 0 to finish):");
+                    decimal option = decimal.Parse(Console.ReadLine());
+
+                    if (option == 1)
+                    {
+                        Console.WriteLine("Enter new phone");
+                        string newPhone = Console.ReadLine();
+                    }
+                    else if (option == 2)
+                    {
+                        Console.WriteLine("Enter new email");
+                        string newEmail = Console.ReadLine();
+                    }
+                    else
+                    {
+                        doneUpdating = true;
+                    }
+                    Database.getDatabase().Customers.Update(chosenCustomer);
+                }
             }
         }
     }
