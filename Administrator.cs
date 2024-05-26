@@ -49,7 +49,8 @@ namespace Assignment3
                         case 3:
                             // Analytics
                             Analytics analytics = new Analytics();
-                            Console.WriteLine(analytics.PrintInvoice());
+                            Invoice invoice = analytics.PrintInvoice();
+                            Console.WriteLine(invoice.GetInformation());
                             break;
                         case 4:
                             // View Orders
@@ -159,23 +160,37 @@ namespace Assignment3
 
         private void Stocktake()
         {
-            Console.WriteLine("\nStocktake:");
-            Console.WriteLine("----------");
-
-            // Get all unique ingredients used in dishes (adjust if needed)
-            List<Ingredient> allIngredients = _db.Dishes.FindAll()
-                .SelectMany(dish => dish.Ingredients) // Flatten the ingredient lists
-                .DistinctBy(i => i.Name) // Use DistinctBy to avoid duplicates (if needed)
-                .ToList();
-
-            // Display stock information for each ingredient
-            foreach (var ingredient in allIngredients)
+            while (true)
             {
-                Console.WriteLine($"{ingredient.Name}: {ingredient.Stock} in stock");
-            }
+                Console.WriteLine("\nStocktake");
+                Console.WriteLine("------------------");
+                Console.WriteLine("1. Print Stocks");
+                Console.WriteLine("2. Add Ingredient");
+                Console.WriteLine("3. Update Ingredient");
+                Console.WriteLine("4. Back to Admin Menu");
+                Console.WriteLine("------------------");
 
-            Console.WriteLine(); // Add an extra line for readability
-        }
+                try
+                {
+                    int choice = int.Parse(Console.ReadLine());
+
+                    switch (choice)
+                    {
+                        case 1:
+                            PrintStocks();
+                            break;
+                        case 2:
+                            AddIngredient();
+                            break;
+                        case 3:
+                            UpdateIngredient();
+                            break;
+                        case 4:
+                            return;
+                        default:
+                            Console.WriteLine("Invalid choice. Please try again.");
+                            break;
+                    }
 
                 }
                 catch (Exception _)

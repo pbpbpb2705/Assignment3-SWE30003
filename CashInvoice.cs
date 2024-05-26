@@ -9,13 +9,19 @@ namespace Assignment3
     // CashInvoice class for cash invoices
     public class CashInvoice : Invoice
     {
-        public CashInvoice(decimal payment_debt, decimal payment_amount, Customer customer) : base(payment_debt, payment_amount, customer)
+        public decimal Payment_debt { get; set; }
+        public decimal Payment_amount { get; set; }
+        public Customer Customer { get; set; }
+        public CashInvoice(decimal payment_debt, decimal payment_amount, Customer customer) : base()
         {
+            Payment_debt = payment_debt;
+            Payment_amount = payment_amount;
+            Customer = customer;
         }
 
-        public override string GetInformation(decimal payment_debt, decimal payment_amount, Customer customer)
+        public override string GetInformation()
         {
-            return "Cash Invoice: " + payment_debt + " " + payment_amount + " " + customer.Name;
+            return "Cash Invoice: Payment debt: " + Payment_debt + "$, Payment amount: " + Payment_amount + "$, Customer's name: " + Customer.Name;
         }
     }
 }

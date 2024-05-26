@@ -15,7 +15,7 @@ namespace Assignment3
             _order = order;
         }
 
-        public override string PrintInvoice()
+        public override Invoice PrintInvoice()
         {
             // Fetch the customer from the database using the CustomerId in the Order
             var customer = Database.getDatabase().Customers.FindById(_order.CustomerId);
@@ -39,10 +39,42 @@ namespace Assignment3
             invoice += "Items:\n";
             foreach (PayableComponent item in _order.Items)
             {
-                invoice += item.Name + " " + item.Price + "\n";
+                invoice += item.Name + " " + item.Price + "$\n";
             }
-            invoice += "Total: " + _order.CalculateTotal() + "\n";
-            return invoice;
+            invoice += "Total: " + _order.CalculateTotal() + "$\n";
+            try
+            {
+                bool finished = false;
+                while (!finished)
+                {
+                    Console.WriteLine("Default payment method is Credit Card. Do you want to change it? (Y/N)");
+                    string paymentMethod = Console.ReadLine();
+                    if (paymentMethod == "Y")
+                    {
+                        CashInvoice receipt = new CashInvoice(_order.CalculateTotal(), _order.CalculateTotal(), customer);
+                        invoice += receipt.GetInformation();
+                        Console.WriteLine(invoice);
+                        return receipt;
+                    }
+                    else if (paymentMethod == "N")
+                    {
+                        CCInvoice receipt = new CCInvoice(_order.CalculateTotal(), _order.CalculateTotal(), customer);
+                        invoice += receipt.GetInformation();
+                        Console.WriteLine(invoice);
+                        return receipt;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Invalid input. Please try again");
+                return new CashInvoice(_order.CalculateTotal(), 0, customer);
+            }
+            return new CashInvoice(_order.CalculateTotal(), 0, customer);
         }
     }
 }

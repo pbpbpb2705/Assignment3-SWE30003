@@ -136,6 +136,9 @@ namespace Assignment3
             // Add order to customer's list
             Orders.Add(order);
             Database.getDatabase().Orders.Insert(order);
+            Payment payment = new Payment(order);
+            Invoice receipt = payment.PrintInvoice();
+            
         }
 
         // Get latest order

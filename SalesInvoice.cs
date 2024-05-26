@@ -9,13 +9,30 @@ namespace Assignment3
     // SalesInvoice class for sales invoices
     public class SalesInvoice : Invoice
     {
-        public SalesInvoice(decimal payment_debt, decimal payment_amount, Customer customer) : base(payment_debt, payment_amount, customer)
+        public decimal TotalOrder { get; set; }
+        public decimal TotalRevenue { get; set; }
+        public SalesInvoice() : base()
         {
+
         }
 
-        public override string GetInformation(decimal payment_debt, decimal payment_amount, Customer customer)
+        public override string GetInformation()
         {
-            return "Sales Invoice: " + payment_debt + " " + payment_amount + " " + customer.Name;
+            //Get all orders from the database
+            IEnumerable<Order> orders = Database.getDatabase().Orders.FindAll();
+            int totalOrders = 0;
+            decimal totalRevenue = 0;
+
+            foreach (Order order in orders)
+            {
+                order.Items.ForEach(item => totalRevenue += item.Price);
+                totalOrders++;
+            }
+
+            TotalOrder = totalOrders;
+            TotalRevenue = totalRevenue;
+
+            return "Sales Invoice:\nNumber of orders: " + TotalOrder + "\nTotal revenue: " + TotalRevenue + "$";
         }
     }
 }

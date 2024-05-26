@@ -13,6 +13,6 @@ namespace Assignment3
         {
         }
 
-        public abstract string PrintInvoice();
+        public abstract Invoice PrintInvoice();
     }
 }

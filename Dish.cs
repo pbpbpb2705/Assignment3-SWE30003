@@ -9,12 +9,10 @@ namespace Assignment3
     // Dish class representing a dish
     public class Dish : PayableComponent
     {
-        public List<Ingredient> Ingredients { get; set; }
-        public Dish(string name, decimal price, List<Ingredient> ingredient) : base(name, price)
+        public List<Ingredient> Ingredients = new List<Ingredient>();
+        public Dish(string name, decimal price) : base(name, price)
         {
             Ingredients = new List<Ingredient>();
-            Name = name;
-            Price = price;
         }
     }
 }
