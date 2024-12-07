@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace Assignment3
 {
-    internal class Dish : PayableComponent
+    // Dish class representing a dish
+    public class Dish : PayableComponent
     {
+        public List<Ingredient> Ingredients = new List<Ingredient>();
         public Dish(string name, decimal price) : base(name, price)
         {
+            Ingredients = new List<Ingredient>();
         }
     }
 }
